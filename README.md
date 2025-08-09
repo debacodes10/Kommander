@@ -29,7 +29,7 @@ Stop wasting time on Stack Overflow or digging through man pages. Describe the t
 
 <p align="center">
   <br/>
-  <img src="https://placehold.co/800x450/1a1b26/e0af68?text=DEMO+GIF+PLACEHOLDER" alt="Kommander Demo"/>
+  <img src="https://github.com/debacodes10/Kommander/blob/main/.assets/kommander-demo.gif?raw=true" alt="Kommander Demo"/>
 </p>
 
 ## ✨ Core Features
