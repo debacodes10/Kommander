@@ -37,4 +37,4 @@ jobs:
       # Step 4: Run our tests with pytest
       - name: Run tests
         run: |
-          pytest
+          pytest src/
