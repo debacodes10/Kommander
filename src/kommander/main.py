@@ -2,6 +2,7 @@ import typer
 import subprocess
 import pyperclip
 from rich import print
+import sys
 
 from .core import generate_script
 from .context import get_os_info
@@ -53,10 +54,24 @@ def ask(query: str = typer.Argument(..., help="The task you want to perform.")):
         # --- 3. ACT ---
         if choice == "execute":
             print("[bold yellow]Executing script...[/bold yellow]")
-            shell_to_use = "powershell" if os_family == "Windows" else "bash"
             
-            # Using subprocess.run to execute the script
-            result = subprocess.run(script, shell=True, check=False, capture_output=True, text=True, executable=shell_to_use)
+            # Platform-specific execution logic
+            if sys.platform == "win32":
+                # On Windows, we explicitly call powershell.exe and pass the script.
+                command_to_run = ['powershell.exe', '-Command', script]
+                use_shell = False
+            else:
+                # On Linux/macOS, we run the script string directly with the default shell.
+                command_to_run = script
+                use_shell = True
+
+            result = subprocess.run(
+                command_to_run, 
+                shell=use_shell, 
+                check=False, 
+                capture_output=True, 
+                text=True
+            )
             
             # Print stdout and stderr from the script
             if result.stdout:
