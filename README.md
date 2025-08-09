@@ -28,7 +28,6 @@ Kommander is a command-line companion that translates your natural language requ
 Stop wasting time on Stack Overflow or digging through man pages. Describe the task you want to accomplish in plain English, and let Kommander generate the script for you. Review the script, and then execute it, copy it, or abort—you are always in control.
 
 <p align="center">
-  <em><strong>(Your amazing demo GIF will go here)</strong></em>
   <br/>
   <img src="https://placehold.co/800x450/1a1b26/e0af68?text=DEMO+GIF+PLACEHOLDER" alt="Kommander Demo"/>
 </p>
