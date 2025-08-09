@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kommander-cli"
+version = "0.0.1"
+authors = [
+  { name="The Kommander Authors" },
+]
+description = "A command-line companion that translates natural language into safe, executable shell commands."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "typer[all]>=0.9.0",
+    "rich>=13.0.0",
+    "openai>=1.10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/debacodes10/Kommander"
+"Bug Tracker" = "https://github.com/debacodes10/Kommander/issues"
+
+[project.scripts]
+kom = "kommander.main:app"
