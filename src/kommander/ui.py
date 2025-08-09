@@ -21,8 +21,9 @@ def display_and_confirm_script(script: str, os_family: str) -> str:
     # Determine the lexer for syntax highlighting
     lexer = "powershell" if os_family == "Windows" else "bash"
 
-    # Clear the console for a clean presentation
-    # os.system('cls' if os.name == 'nt' else 'clear')
+    # --- THIS IS THE FIX ---
+    # Clear the console for a clean presentation before showing the script.
+    os.system('cls' if os.name == 'nt' else 'clear')
 
     console.print(Panel(
         Syntax(script, lexer, theme="monokai", line_numbers=True),
@@ -32,7 +33,7 @@ def display_and_confirm_script(script: str, os_family: str) -> str:
     ))
 
     choice = Prompt.ask(
-        "[bold]What would you like to do?[/bold]",
+        "\n[bold]What would you like to do?[/bold]",
         choices=["execute", "copy", "abort"],
         default="abort"
     ).lower()

@@ -1,0 +1,40 @@
+name: Python CI
+
+# This action runs on every push to the main branch
+# and on every pull request that targets the main branch.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # We will test on the latest version of Ubuntu
+    runs-on: ubuntu-latest
+    
+    # We'll test against multiple Python versions to ensure compatibility
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.10", "3.12"]
+
+    steps:
+      # Step 1: Check out our repository code so the workflow can use it
+      - uses: actions/checkout@v4
+
+      # Step 2: Set up the specific version of Python from our matrix
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Step 3: Install our project's dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      # Step 4: Run our tests with pytest
+      - name: Run tests
+        run: |
+          pytest

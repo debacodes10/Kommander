@@ -1,19 +1,15 @@
 import os
 from typing import Dict, Any
-from dotenv import load_dotenv
 import google.generativeai as genai
 
 from .context import get_os_info
-
-# Load environment variables from .env file
-load_dotenv()
+from .config import load_api_key # <-- IMPORT the new function
 
 def build_prompt(query: str, context: Dict[str, Any]) -> str:
     """Constructs the full prompt to be sent to the AI."""
     
-    os_family = context.get("os_family", "system") # Default to 'system' if not found
+    os_family = context.get("os_family", "system")
     
-    # This prompt is now dynamic based on the detected OS family.
     prompt = f"""
 You are an expert systems administrator for the {os_family} operating system. Your task is to take a user's request and their system context, and generate a concise, safe, and idempotent script to fulfill the request.
 
@@ -37,9 +33,15 @@ Generate the script:
 def call_gemini_api(prompt: str) -> str:
     """Calls the Google Gemini API and returns the generated script."""
     
-    api_key = os.getenv("GOOGLE_API_KEY")
+    # --- THIS IS THE MAIN CHANGE ---
+    api_key = load_api_key()
     if not api_key:
-        raise ValueError("GOOGLE_API_KEY environment variable not found.")
+        # Provide a user-friendly error message
+        error_message = (
+            "Google API key not found. "
+            "Please run 'kom configure' to set your API key."
+        )
+        return f"Error: {error_message}"
         
     try:
         genai.configure(api_key=api_key)
@@ -49,7 +51,6 @@ def call_gemini_api(prompt: str) -> str:
         response = model.generate_content(prompt)
         
         if response.parts:
-            # Clean up the output to remove the markdown backticks
             script_text = response.text.strip()
             if script_text.lower().startswith("```powershell"):
                 script_text = script_text[13:]
@@ -74,13 +75,6 @@ def generate_script(query: str) -> str:
     The main orchestration function.
     Takes a user query and returns a generated shell script.
     """
-    print("Gathering system context...")
-    context = get_os_info()
-    
-    print("Building OS-specific prompt for Gemini...")
-    prompt = build_prompt(query, context)
-    
-    print("Calling Gemini AI... (This may take a moment)")
+    prompt = build_prompt(query, get_os_info())
     script = call_gemini_api(prompt)
-    
     return script
