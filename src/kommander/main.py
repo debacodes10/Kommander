@@ -26,6 +26,18 @@ def check():
     info = get_os_info()
     print(info)
 
+@app.command()
+def ask(query: str = typer.Argument(..., help="The task you want to perform.")):
+    """
+    Asks the AI to generate a script for a given task.
+    """
+    from .core import generate_script # Local import
+    
+    print(f"Kommander received your request: [bold cyan]'{query}'[/bold cyan]")
+    generated_script = generate_script(query)
+    print("\n--- AI Generated Script ---")
+    print(generated_script)
+    print("---------------------------\n")
 
 # Main entry point
 if __name__ == "__main__":
