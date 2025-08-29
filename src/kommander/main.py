@@ -66,8 +66,22 @@ def ask(query: str = typer.Argument(..., help="The task you want to perform.")):
                 command_to_run = script
                 use_shell = True
 
+            # --- DEBUGGING PRINTS GO HERE ---
+
+            # [DEBUG 1] Print the command we are about to run
+            print(f"\n--- [DEBUG] Command to run ---\n{command_to_run}\n------------------------------") 
+
             result = subprocess.run(command_to_run, shell=use_shell, check=False, capture_output=True, text=True)
             
+            # [DEBUG 2] Print the return code from the process
+            print(f"--- [DEBUG] Return Code: {result.returncode}") 
+            
+            # [DEBUG 3 & 4] Print stdout and stderr, even if they are empty
+            print(f"--- [DEBUG] STDOUT ---\n{result.stdout or '(empty)'}\n----------------------")
+            print(f"--- [DEBUG] STDERR ---\n{result.stderr or '(empty)'}\n----------------------")
+
+            # --- ORIGINAL CODE CONTINUES ---
+
             if result.stdout:
                 print("[bold green]--- SCRIPT OUTPUT ---[/bold green]")
                 print(result.stdout)
@@ -87,6 +101,6 @@ def ask(query: str = typer.Argument(..., help="The task you want to perform.")):
     except Exception as e:
         print(f"[bold red]An unexpected error occurred: {e}[/bold red]")
         raise typer.Exit(code=1)
-
+    
 if __name__ == "__main__":
     app()
